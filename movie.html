@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Movie App</title>
+  <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+
+    #movieList {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    .movieItem {
+      margin-bottom: 10px;
+    }
+
+    .removeButton {
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+    }
+    
+    .sortButton {
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+
+<form id="movieForm">
+  <label for="title">Title:</label>
+  <input type="text" id="title" placeholder="Enter movie title (min. 2 characters)" required minlength="2">
+
+  <label for="rating">Rating:</label>
+  <input type="number" id="rating" placeholder="Enter movie rating (0-10)" required min="0" max="10">
+
+  <button type="submit">Add Movie</button>
+</form>
+
+<div>
+  <button class="sortButton" id="sortTitleAsc">Sort by Title (A-Z)</button>
+  <button class="sortButton" id="sortTitleDesc">Sort by Title (Z-A)</button>
+  <button class="sortButton" id="sortRatingAsc">Sort by Rating (Low to High)</button>
+  <button class="sortButton" id="sortRatingDesc">Sort by Rating (High to Low)</button>
+</div>
+
+<ul id="movieList"></ul>
+
+<script>
+  $(document).ready(function () {
+    $('#movieForm').submit(function (event) {
+      event.preventDefault();
+
+      let title = $('#title').val();
+      let rating = $('#rating').val();
+
+      $('#movieList').append(`
+        <li class="movieItem" data-title="${title}" data-rating="${rating}">
+          <span>Title: ${title}, Rating: ${rating}</span>
+          <button class="removeButton">Remove</button>
+        </li>
+      `);
+
+      $('#title').val('');
+      $('#rating').val('');
+    });
+
+    $('#movieList').on('click', '.removeButton', function () {
+      $(this).closest('li').remove();
+    });
+
+    // Sorting 
+    $('.sortButton').click(function () {
+      let sortType = $(this).attr('id');
+      sortMovies(sortType);
+    });
+
+    function sortMovies(sortType) {
+      let movies = $('#movieList').children('li').toArray();
+
+      movies.sort(function (a, b) {
+        let aValue, bValue;
+
+        if (sortType.includes('Title')) {
+          aValue = $(a).data('title').toLowerCase();
+          bValue = $(b).data('title').toLowerCase();
+        } else {
+          aValue = parseFloat($(a).data('rating'));
+          bValue = parseFloat($(b).data('rating'));
+        }
+
+        if (sortType.includes('Desc')) {
+          return bValue.localeCompare(aValue);
+        } else {
+          return aValue.localeCompare(bValue);
+        }
+      });
+
+      $('#movieList').empty().append(movies);
+    }
+  });
+</script>
+
+</body>
+</html>
