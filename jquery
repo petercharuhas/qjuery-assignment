@@ -1,0 +1,44 @@
+<script>
+
+  // 1.
+
+  $(document).ready(function () {
+    console.log("Let's get ready to party with jQuery!");
+
+    // 2.
+    $("article img").addClass("centered-image");
+
+    // 3.
+
+    $("article p:last-of-type").remove();
+
+    // 4.
+
+    let randomSize = Math.floor(Math.random() * 101);
+    $("#title").css("font-size", randomSize + "px");
+
+    // 5.
+    $("ol").append($("<li>").text("Learning jQuery is fun!"));
+
+    // 6.
+    $("aside")
+        .empty()
+        .append($("<p>").text("My apologies for that unnecessary list."));
+
+    // 7. 
+    $(".form-control").on('input', function () {
+      let red = $(".form-control").eq(0).val();
+      let blue = $(".form-control").eq(1).val();
+      let green = $(".form-control").eq(2).val();
+      $("body").css("background-color", `rgb(${red},${green},${blue})`);
+    });
+
+    // 8. 
+    $("img").on('click', function () {
+      $(this).fadeOut(function () {
+        $(this).remove();
+      });
+    });
+  });
+
+</script>
